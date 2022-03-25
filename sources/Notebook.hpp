@@ -1,17 +1,22 @@
 #pragma once
 
 #include <string>
+#include <array>
+#include <vector>
 #include "Direction.hpp"
 
 using ariel::Direction;
 using namespace std;
 namespace ariel{
     class Notebook{
-    public:
-    void write(int page, int row, int column, Direction direction, const string &data);
-    string read(int page, int row, int column, Direction direction, int length);
-    void erase(int page, int row, int column, Direction direction, int length);
-    string show(int page);
+        private:
+            vector<vector<array<char,100>>> paper;
+
+        public:
+            void write(int page, int row, int column, Direction direction, const string &data);
+            string read(int page, int row, int column, Direction direction, int length);
+            void erase(int page, int row, int column, Direction direction, int length);
+            string show(int page);
     };
 }
 // class ariel::Notebook{
