@@ -10,6 +10,7 @@
 #include "Direction.hpp"
 using namespace ariel;
 
+#include <iostream>
 #include <string>
 #include <algorithm>
 using namespace std;
@@ -112,9 +113,10 @@ TEST_CASE("Bad Input"){
     CHECK_NOTHROW(notebook1.write(70, 1 , 0, Direction::Horizontal, "ABC"));// should run
     CHECK_THROWS(notebook1.write(70, 0 , 1, Direction::Vertical, "ABC"));
     //#1.8 illegal characters
-    for (int i = 0; i < 36; i++)
+    for (int i = 0; i < 32; i++)
     {
         char c = i;
+        cout << i << endl;
         CHECK_THROWS(notebook1.write(71,0,0,Direction::Horizontal, string(1,c)));
     }
     CHECK_THROWS(notebook1.write(71,0,0,Direction::Horizontal, string(1,126)));

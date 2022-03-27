@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <array>
+#include <unordered_map>
 #include <vector>
 #include "Direction.hpp"
 
@@ -10,7 +10,7 @@ using namespace std;
 namespace ariel{
     class Notebook{
         private:
-            vector<vector<array<char,100>>> paper;
+            std::unordered_map<std::string, std::vector<char>> paper;
 
         public:
             void write(int page, int row, int column, Direction direction, const string &data);
