@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
 #include "Notebook.hpp"
-
 using ariel::Direction;
 using namespace std;
 
+const int MIN_CHAR = 32;
+const unsigned long LINE_WIDTH = 100;
+const int MAX_CHAR = 125;
 /**
  * @brief checks if the param violte the notebook structure
  * 
@@ -15,7 +17,7 @@ using namespace std;
  * @param length 
  */
 void check_params(int page, int row, int column, Direction direction, int length){
-    if((direction == Direction::Horizontal && column + length > 100) 
+    if((direction == Direction::Horizontal && column + length > LINE_WIDTH) 
         || (column < 0 || page < 0 || row < 0 || length < 0)){
         throw("Out of boundaries");
     }
@@ -24,23 +26,14 @@ void check_params(int page, int row, int column, Direction direction, int length
 void valid_write(string const &data){
     for (int i = 0; i < data.length(); i++)
     {
-        for (int j = 0; j < 32; j++)
-        {
-            char c = j;
-            if(data[(unsigned long)i] == c){
-                throw("unsupported char");
-            }
-        }
-        if(data[(unsigned long)i] == 126){
-            throw("unsupported char");
-        }
-        if(data[(unsigned long)i] == 127){
+        char c = data[(unsigned long)i];
+        if(c < MIN_CHAR || c > MAX_CHAR){
             throw("unsupported char");
         }
     }
 }
 
-std::vector<char> new_line (100, '_');
+std::vector<char> new_line (LINE_WIDTH, '_');
 
 void ariel::Notebook::write(int page, int row, int column, Direction direction, const string &data){
     // אפשר לממש בעזרת ריד, קודם נקרא את המקום אליו נרצה לכתוב ונוודא שהוא פנוי ותקין
@@ -75,7 +68,7 @@ string ariel::Notebook::read(int page, int row, int column, Direction direction,
     if(direction == Direction::Horizontal){
         //create string representing the line
         string index_string = std::to_string(page )+ "-" + std::to_string(row);
-        if (paper[index_string].size() == 0)
+        if (paper[index_string].empty())
         {
             paper[index_string] = new_line;
         }    
@@ -88,7 +81,7 @@ string ariel::Notebook::read(int page, int row, int column, Direction direction,
         for (int i = 0; i < length; i++)
         {
             string index_string = std::to_string(page )+ "-" + std::to_string(row+i);
-            if (paper[index_string].size() == 0)
+            if (paper[index_string].empty())
             {
                 paper[index_string] = new_line;
             }
@@ -120,5 +113,10 @@ string ariel::Notebook::show(int page){
     if( page < 0){
         throw("Out of boundaries");
     }
-    return "";
+    string res;
+    for (int i = 0; i < LINE_WIDTH; i++)
+    {
+        res += read(page, i, 0, Direction::Horizontal, LINE_WIDTH);
+    }
+    return res;
     }

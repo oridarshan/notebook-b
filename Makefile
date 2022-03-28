@@ -16,7 +16,7 @@ OBJECTS=$(subst sources/,objects/,$(subst .cpp,.o,$(SOURCES)))
 
 run: test
 
-test: TestRunner.o Test.o $(OBJECTS)
+test: TestRunner.o StudentTest1.o StudentTest2.o StudentTest3.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 %.o: %.cpp $(HEADERS)
@@ -25,11 +25,20 @@ test: TestRunner.o Test.o $(OBJECTS)
 $(OBJECT_PATH)/%.o: $(SOURCE_PATH)/%.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) --compile $< -o $@
 
+StudentTest1.cpp:  # Aviad Gilboa
+	curl https://raw.githubusercontent.com/Avgilboa/notebook-a/main/Test.cpp > $@
+
+StudentTest2.cpp:  # Orel Zelmer
+	curl https://raw.githubusercontent.com/orelz890/Ex2_cpp_a/main/Test.cpp > $@
+
+StudentTest3.cpp:  # Ofri Tavor
+	curl https://raw.githubusercontent.com/Unusual55/CPP_Ex2_a/main/Test.cpp > $@
+
 tidy:
 	clang-tidy $(SOURCES) $(TIDY_FLAGS) --
 
 valgrind: test
-	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test1 2>&1 | { egrep "lost| at " || true; }
+	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test 2>&1 | { egrep "lost| at " || true; }
 
 clean:
 	rm -f $(OBJECTS) *.o test* 
